@@ -19,6 +19,7 @@ namespace PDF_Interpreter
         public MainWindow()
         {
             InitializeComponent();
+            Loaded+=(s,e)=>MyDebug.Show(this);
         }
     }
 }
