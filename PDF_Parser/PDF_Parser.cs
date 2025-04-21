@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDF_Interpreter
+namespace PDF_Interpreter.PDF_Parser
 {
-    internal class Test
+    public class PDF_Parser
     {
+
     }
 }
