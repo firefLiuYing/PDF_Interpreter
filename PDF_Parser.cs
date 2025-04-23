@@ -9,7 +9,6 @@ namespace PDF_Interpreter
 {
     internal class PDF_Parser
     {
-        private Interpreter interpreter = new();
         public void Parser()
         {
             Debug.WriteLine("测试Debug功能");

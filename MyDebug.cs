@@ -11,7 +11,7 @@ namespace PDF_Interpreter
     internal static class MyDebug
     {
 #if DEBUG
-        private static DebugWindow debugWindow;
+        private static DebugWindow? debugWindow;
 #endif
         public static void Show(Window owner)
         {
