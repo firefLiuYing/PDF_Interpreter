@@ -3,7 +3,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Windows;
 
-namespace PDF_Interpreter
+namespace PdfInterpreter
 {
     /// <summary>
     /// Interaction logic for App.xaml

@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PDF_Interpreter
+namespace PdfInterpreter
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -81,7 +81,7 @@ namespace PDF_Interpreter
             string inputPath = InputPathTextBox.Text;
             string outputPath = OutputPathTextBox.Text;
 
-            PDF_Parser parser = new();
+            PdfParser parser = new();
 
             // 检查输入路径和输出路径是否为空
             if (string.IsNullOrWhiteSpace(inputPath) || string.IsNullOrWhiteSpace(outputPath))
@@ -90,7 +90,7 @@ namespace PDF_Interpreter
                 return;
             }
 
-            TestTextBox.Text = parser.FindPDF(inputPath, outputPath);
+            TestTextBox.Text = parser.FindPdf(inputPath, outputPath);
             MyDebug.Log(TestTextBox.Text);
         }
     }
