@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace PDF_Interpreter
+namespace PdfInterpreter
 {
     internal static class MyDebug
     {

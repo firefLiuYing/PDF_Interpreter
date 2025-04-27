@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace PDF_Interpreter
+namespace PdfInterpreter
 {
     /// <summary>
     /// DebugWindow.xaml 的交互逻辑
