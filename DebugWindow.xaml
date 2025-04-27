@@ -16,12 +16,17 @@
         </Grid.ColumnDefinitions>
         
         <TextBox 
-                 Grid.Row="0"
-                 Grid.Column="0"
-                 x:Name="DebugOutput"
-                 IsReadOnly="True"
-                 VerticalScrollBarVisibility="Auto"
-                 FontFamily="Consolas"
-                 TextWrapping="Wrap"/>
+                Grid.Row="0"
+                Grid.Column="0"
+                x:Name="DebugOutput"
+                IsReadOnly="True"
+                VerticalScrollBarVisibility="Auto"
+                HorizontalScrollBarVisibility="Disabled"
+                FontFamily="Consolas"
+                TextWrapping="Wrap"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch"
+
+            />
     </Grid>
 </Window>
