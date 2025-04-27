@@ -12,7 +12,7 @@
         
         
         <!-- 上半部分的 Grid -->
-        <Grid Grid.Row="0" Background="LightBlue">
+        <Grid Grid.Row="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
@@ -25,17 +25,21 @@
 
             <!-- 输入路径 -->
             <TextBox x:Name="InputPathTextBox" Grid.Row="0" Grid.Column ="0"  VerticalScrollBarVisibility="Auto" 
+                     HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="600" Height="30"
                  TextChanged="PathTextBox_TextChanged" />
 
             <!-- 按钮用于选择输入路径 -->
-            <Button Content="选择输入路径"  Grid.Row="1" Grid.Column ="0"  Click="Input_Path_Choose_Click"/>
+            <Button Content="选择输入路径"  Grid.Row="1" Grid.Column ="0"  Click="Input_Path_Choose_Click"
+                    HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" Height="30"/>
 
             <!-- 输出路径 -->
             <TextBox x:Name="OutputPathTextBox" Grid.Row="0" Grid.Column ="1" VerticalScrollBarVisibility="Auto" 
+                    HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="600" Height="30"
                  TextChanged="PathTextBox_TextChanged" />
 
             <!-- 按钮用于选择输入路径 -->
-            <Button Content="选择输出路径" Grid.Row="1" Grid.Column ="1" Click="Output_Path_Choose_Click"/>
+            <Button Content="选择输出路径" Grid.Row="1" Grid.Column ="1" Click="Output_Path_Choose_Click"
+                     HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" Height="30"/>
 
         </Grid>
 
@@ -50,10 +54,12 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <!-- 按钮用于确定路径并进行转换 -->
-            <Button Content="开始转换" Grid.Row="0" Grid.Column ="0"  Click="Convert_Click" />
+            <Button Content="开始转换" Grid.Row="0" Grid.Column ="0"  Click="Convert_Click"
+                     HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Height="60"/>
 
             <!-- 调试文字提取的窗口 -->
             <TextBox x:Name="TestTextBox" Grid.Row="1" Grid.Column ="0"  TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" 
+                 HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="600" Height="200"
                  TextChanged="PathTextBox_TextChanged" />
         </Grid>
 

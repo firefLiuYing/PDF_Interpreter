@@ -6,8 +6,19 @@
         xmlns:local="clr-namespace:PDF_Interpreter"
         mc:Ignorable="d"
         Title="DebugWindow" Height="450" Width="800">
-    <Grid>
-        <TextBox x:Name="DebugOutput"
+    <Grid Margin="10,20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        
+        <TextBox 
+                 Grid.Row="0"
+                 Grid.Column="0"
+                 x:Name="DebugOutput"
                  IsReadOnly="True"
                  VerticalScrollBarVisibility="Auto"
                  FontFamily="Consolas"
