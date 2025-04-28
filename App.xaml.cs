@@ -12,13 +12,7 @@ namespace PdfInterpreter
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
-            TestInterpret();
-        }
-        private async void TestInterpret()
-        {
-            string text=await Interpreter.InterpretAsync("私がオナニーを見てください", "auto","wyw");
-            MyDebug.Log(text);
+            base.OnStartup(e); 
         }
         protected override void OnExit(ExitEventArgs e)
         {

@@ -21,11 +21,10 @@ namespace PdfInterpreter
             try
             {
                 PdfWriter pdfWriter = new(outputPath);
-                PdfDocument pdfDocument=new(pdfWriter);
-                Document document = new(pdfDocument);
-                document.Add(new Paragraph("Hello World!"));
-                document.Close();
-                
+                PdfReader pdfReader=new(inputPath);
+                PdfDocument pdfDocument = new(pdfReader, pdfWriter);
+                MyDebug.Log(pdfDocument.GetNumberOfPages().ToString());
+                pdfDocument.Close();
             }
             catch(Exception ex)
             {
