@@ -50,20 +50,17 @@ namespace PdfInterpreter
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
-                Filter = "文件夹|",
-                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                CheckFileExists = false,
-                CheckPathExists = true,
-                FileName = "选择文件夹",
-                AddExtension = false,
-                ValidateNames = false
+                Filter = "所有文件(*.*)|*.*", // 设置文件过滤器
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) // 设置初始目录
             };
 
+            // 显示对话框
             if (openFileDialog.ShowDialog() == true)
             {
-                string selectedFolderPath = System.IO.Path.GetDirectoryName(openFileDialog.FileName);
-                // 将路径显示在 TextBox 中（假设你有一个名为 PathTextBox 的 TextBox）
-                OutputPathTextBox.Text = selectedFolderPath;
+                // 获取用户选择的文件路径
+                string selectedPath = openFileDialog.FileName;
+                // 将路径显示在 TextBox 中
+                OutputPathTextBox.Text = selectedPath;
             }
         }
         private void Convert_Click(object sender, RoutedEventArgs e)
