@@ -1,13 +1,7 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using iTextSharp.text.pdf.parser;
-using iTextSharp.text.pdf;
+﻿using System.Diagnostics;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
 
 namespace PdfInterpreter
 {
@@ -18,34 +12,31 @@ namespace PdfInterpreter
             Debug.WriteLine("测试Debug功能");
         }
 
-        public string FindPdf(string Input_Path,string Output_Path)
+        public string FindPdf(string inputPath,string outputPath)
         {
             //检测路径是否正确
-            if (!File.Exists(Input_Path))  MessageBox.Show("文件不存在!", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
-            if (!File.Exists(Output_Path)) MessageBox.Show("输出路径不存在！", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            //if (!File.Exists(inputPath))  MessageBox.Show("文件不存在!", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            //if (!File.Exists(outputPath)) MessageBox.Show("输出路径不存在！", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
 
-            
-
-
-
-
-
-
-            return ExtractTextFromPdf(Input_Path);
+            try
+            {
+                PdfWriter pdfWriter = new("D:\\UserResource\\DeskTop\\TEST.pdf");
+                PdfDocument pdfDocument=new(pdfWriter);
+                Document document = new(pdfDocument);
+                document.Add(new Paragraph("Hello World!"));
+                document.Close();
+            }
+            catch(Exception ex)
+            {
+                MyDebug.Log(ex.Message);
+            }
+            return ExtractTextFromPdf(inputPath);
 
         }
 
         public static string ExtractTextFromPdf(string path)
         {
-            using (PdfReader reader = new PdfReader(path))
-            {
-                string text = string.Empty;
-                for (int i = 1; i <= reader.NumberOfPages; i++)
-                {
-                    text += PdfTextExtractor.GetTextFromPage(reader, i);
-                }
-                return text;
-            }
+            return "哈哈哈";
         }
     }
 }
