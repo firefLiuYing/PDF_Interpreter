@@ -23,7 +23,7 @@ namespace PdfInterpreter
                 PdfWriter pdfWriter = new(outputPath);
                 PdfReader pdfReader=new(inputPath);
                 PdfDocument pdfDocument = new(pdfReader, pdfWriter);
-                MyDebug.Log(pdfDocument.GetNumberOfPages().ToString());
+                MyDebug.Log(pdfDocument.GetNumberOfPages());
                 pdfDocument.Close();
             }
             catch(Exception ex)
