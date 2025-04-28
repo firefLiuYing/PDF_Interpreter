@@ -21,7 +21,14 @@ namespace PdfInterpreter
             debugWindow.Show();
 #endif
         }
-        public static void Log(string message)
+        public static void Log(object message)
+        {
+            if(message == null) Log("null");
+            else if (message is string str) Log(str);
+            else if (message is Exception ex) Log(ex.ToString());
+            else Log(message.ToString());
+        }
+        private static void Log(string message)
         {
 #if DEBUG
             debugWindow?.Log(message);
