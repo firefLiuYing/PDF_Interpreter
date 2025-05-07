@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Net.Http.Headers;
 using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
@@ -12,31 +13,24 @@ namespace PdfInterpreter
             Debug.WriteLine("测试Debug功能");
         }
 
-        public string FindPdf(string inputPath,string outputPath)
+        public async Task<string> FindPdf(string inputPath,string outputPath)
         {
-            //检测路径是否正确
-            //if (!File.Exists(inputPath))  MessageBox.Show("文件不存在!", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
-            //if (!File.Exists(outputPath)) MessageBox.Show("输出路径不存在！", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
-
-            try
+            List<string> paragraphs = AsposeExtractor.ExtractTextFromPdf(inputPath);
+            List<string> translateds = [];
+            foreach (string par in paragraphs)
             {
-                PdfWriter pdfWriter = new(outputPath);
-                PdfReader pdfReader=new(inputPath);
-                PdfDocument pdfDocument = new(pdfReader, pdfWriter);
-                MyDebug.Log(pdfDocument.GetNumberOfPages());
-                pdfDocument.Close();
+                string translated = await Interpreter.InterpretAsync(par);
+                translateds.Add(translated);
             }
-            catch(Exception ex)
-            {
-                MyDebug.Log(ex.Message);
-            }
-            return ExtractTextFromPdf(inputPath);
-
+            
+            return "翻译完成";
         }
-
-        public static string ExtractTextFromPdf(string path)
+        public async Task<string> TestTranslate(string text)
         {
-            return "哈哈哈";
+            await Task.Delay(1);
+            MyDebug.Log("正在翻译：" + text);
+            
+            return text;
         }
     }
 }

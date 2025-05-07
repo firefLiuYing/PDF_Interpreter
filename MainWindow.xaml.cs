@@ -63,7 +63,7 @@ namespace PdfInterpreter
                 OutputPathTextBox.Text = selectedPath;
             }
         }
-        private void Convert_Click(object sender, RoutedEventArgs e)
+        private async void Convert_Click(object sender, RoutedEventArgs e)
         {
 
             string inputPath = InputPathTextBox.Text;
@@ -78,7 +78,7 @@ namespace PdfInterpreter
                 return;
             }
 
-            TestTextBox.Text = parser.FindPdf(inputPath, outputPath);
+            TestTextBox.Text = await parser.FindPdf(inputPath, outputPath);
             MyDebug.Log(TestTextBox.Text);
         }
     }
