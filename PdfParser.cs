@@ -15,14 +15,14 @@ namespace PdfInterpreter
 
         public async Task<string> FindPdf(string inputPath,string outputPath)
         {
+            await Task.Delay(1);
             List<string> paragraphs = AsposeExtractor.ExtractTextFromPdf(inputPath);
-            List<string> translateds = [];
+            /*List<string> translateds = [];
             foreach (string par in paragraphs)
             {
                 string translated = await Interpreter.InterpretAsync(par);
                 translateds.Add(translated);
-            }
-            
+            }*/
             return "翻译完成";
         }
         public async Task<string> TestTranslate(string text)

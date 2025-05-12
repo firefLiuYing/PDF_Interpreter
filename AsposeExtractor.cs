@@ -6,7 +6,9 @@ using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ImageFormat = System.Drawing.Imaging.ImageFormat;
 using Rectangle = Aspose.Pdf.Rectangle;
@@ -34,7 +36,7 @@ namespace PdfInterpreter
             List<string> paragraphs = [];
             foreach(var page in document.Pages)
             {
-                var absorber = new Aspose.Pdf.Text.ParagraphAbsorber();
+                var absorber = new ParagraphAbsorber();
                 absorber.Visit(page);
                 foreach(var markup in absorber.PageMarkups)
                 {
@@ -43,17 +45,33 @@ namespace PdfInterpreter
                         DrawRectangleOnPage(section.Rectangle, page);
                         foreach (var paragraph in section.Paragraphs)
                         {
+                            if(IsTable(paragraph)) continue;
+                            paragraph.Text=Regex.Replace(paragraph.Text, @"\r\n|\r|\n", " ");
                             paragraphs.Add(paragraph.Text);
                         }
                     }
                 }
             }
-            foreach(string par in paragraphs)
-            {
-                MyDebug.Log(par);
-            }
             document.Save("D:\\UserResource\\DeskTop\\Output\\Test.pdf");
             return paragraphs;
+        }
+        private static bool IsTable(MarkupParagraph paragraph)
+        {
+            Dictionary<int, int> yValueMap = [];
+            foreach (var point in paragraph.Points)
+            {
+                int yValue = (int)point.Y;
+                if (yValueMap.ContainsKey(yValue))
+                {
+                    yValueMap[yValue]++;
+                    if (yValueMap[yValue]>=3) return true;
+                }
+                else
+                {
+                    yValueMap[yValue] = 1;
+                }
+            }
+            return false;
         }
         private static void DrawRectangleOnPage(Rectangle rectangle, Page page)
         {
