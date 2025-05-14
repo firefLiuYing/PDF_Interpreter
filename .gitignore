@@ -364,3 +364,5 @@ FodyWeavers.xsd
 /Interpreter.cs
 /ExtractStrategy.cs
 /TextReplace.cs
+/AsposeExtractor.cs
+/MainWindow.xaml.cs
