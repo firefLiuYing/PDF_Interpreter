@@ -43,40 +43,71 @@ namespace PdfInterpreter
                     foreach (MarkupSection section in markup.Sections)
                     {
                         DrawRectangleOnPage(section.Rectangle, page);
-                        string finalText = string.Empty;
-                        TextState textState=new();
+                        TextBuilder textBuilder = new(page);
+                        TextParagraph textParagraph = new();
+                        textParagraph.Rectangle = section.Rectangle;
+                        textParagraph.FormattingOptions.WrapMode = TextFormattingOptions.WordWrapMode.ByWords;
+                        string toBeTranslated = string.Empty;
+                        TextFragmentState curTextState = section.Paragraphs[0].Lines[0][0].TextState;
                         foreach (var paragraph in section.Paragraphs)
                         {
                             if (IsTable(paragraph)) continue;
-                            string tobeTranslated = Regex.Replace(paragraph.Text, @"\r\n|\r|\n", " ");
-                            string translated =await Interpreter.FreeInterpretAsync(tobeTranslated);
-                            finalText += translated + "\n";
-                            paragraphs.Add(translated);
+                            if (HaveUrl(paragraph)) continue;
                             foreach (var line in paragraph.Lines)
                             {
-                                foreach (var textFragment in line)
+                                foreach(var fragment in line)
                                 {
-                                    textState = textFragment.TextState;
-                                    textFragment.TextState.ForegroundColor = Color.FromArgb(1,1,1,1);
+                                    if(fragment.TextState.FontStyle!=FontStyles.Bold)
+                                    {
+                                        curTextState.FontStyle=FontStyles.Regular;
+                                    }
+                                    toBeTranslated += fragment.Text;
+                                    fragment.TextState.ForegroundColor=Aspose.Pdf.Color.FromArgb(1,1,1,1) ;
                                 }
                             }
                         }
-                        AddText(finalText, section.Rectangle, page, textState);
+                        string finalText = await Interpreter.FreeInterpretAsync(toBeTranslated);
+                        MyDebug.Log(finalText);
+                        var newFragment = GetTextFragment(finalText, curTextState);
+                        textParagraph.AppendLine(newFragment);
+                        textBuilder.AppendParagraph(textParagraph);
                     }
                 }
                 document.Save("D:\\UserResource\\DeskTop\\Output\\Test.pdf");
             }
             return paragraphs;
         }
-        private static void AddText(string text,Rectangle rectangle, Page page,TextState textState)
+        private static bool IsUrl(string url)
+        {
+            string pattern = @"^(https?://)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(/.*)?$";
+            Regex regex=new Regex(pattern);
+            return regex.IsMatch(url);
+        }
+        private static void AddText(string text,Rectangle rectangle, Page page,TextFragmentState textState)
         {
             TextParagraph textParagraph = new();
             TextBuilder textBuilder = new(page);
-            textParagraph.AppendLine(text);
-            textParagraph.FormattingOptions.WrapMode = Aspose.Pdf.Text.TextFormattingOptions.WordWrapMode.ByWords;
-            textParagraph.Position = 
-                new Position(rectangle.Center().X-rectangle.Width/2, rectangle.Center().Y+rectangle.Height/2); 
+            textParagraph.Rectangle = rectangle;
+            textParagraph.FormattingOptions.WrapMode = TextFormattingOptions.WordWrapMode.ByWords;
+            TextFragment fragment = new(text);
+            MyDebug.Log(text);
+            fragment.TextState.FontSize = textState.FontSize;
+            fragment.TextState.FontStyle = textState.FontStyle;
+            fragment.TextState.CharacterSpacing = textState.CharacterSpacing;
+            fragment.TextState.LineSpacing = textState.LineSpacing;
+            fragment.TextState.Rotation = textState.Rotation;
+            textParagraph.AppendLine(fragment);
             textBuilder.AppendParagraph(textParagraph);
+        }
+        private static TextFragment GetTextFragment(string text,TextFragmentState textState)
+        {
+            TextFragment fragment = new(text);
+            fragment.TextState.FontSize = textState.FontSize;
+            fragment.TextState.FontStyle = textState.FontStyle;
+            fragment.TextState.CharacterSpacing = textState.CharacterSpacing;
+            fragment.TextState.LineSpacing = textState.LineSpacing;
+            fragment.TextState.Rotation = textState.Rotation;
+            return fragment;
         }
         private static bool IsTable(MarkupParagraph paragraph)
         {
@@ -92,6 +123,17 @@ namespace PdfInterpreter
                 else
                 {
                     yValueMap[yValue] = 1;
+                }
+            }
+            return false;
+        }
+        private static bool HaveUrl(MarkupParagraph paragraph)
+        {
+            foreach(var line in  paragraph.Lines)
+            {
+                foreach (var framgent in line)
+                {
+                    if (IsUrl(framgent.Text)) return true;
                 }
             }
             return false;
