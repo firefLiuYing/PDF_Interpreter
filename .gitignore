@@ -366,3 +366,5 @@ FodyWeavers.xsd
 /TextReplace.cs
 /AsposeExtractor.cs
 /MainWindow.xaml.cs
+/AsposeExtractor.cs
+/PdfParser.cs
