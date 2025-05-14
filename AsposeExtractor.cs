@@ -30,30 +30,53 @@ namespace PdfInterpreter
                 }
             }
         }
-        public static List<string> ExtractTextFromPdf(string input)
+        public static async Task<List<string>> ExtractTextFromPdf(string input)
         {
             Document document = new(input);
             List<string> paragraphs = [];
-            foreach(var page in document.Pages)
+            foreach (var page in document.Pages)
             {
                 var absorber = new ParagraphAbsorber();
                 absorber.Visit(page);
-                foreach(var markup in absorber.PageMarkups)
+                foreach (var markup in absorber.PageMarkups)
                 {
-                    foreach(MarkupSection section in markup.Sections)
+                    foreach (MarkupSection section in markup.Sections)
                     {
                         DrawRectangleOnPage(section.Rectangle, page);
+                        string finalText = string.Empty;
+                        TextState textState=new();
                         foreach (var paragraph in section.Paragraphs)
                         {
-                            if(IsTable(paragraph)) continue;
-                            paragraph.Text=Regex.Replace(paragraph.Text, @"\r\n|\r|\n", " ");
-                            paragraphs.Add(paragraph.Text);
+                            if (IsTable(paragraph)) continue;
+                            string tobeTranslated = Regex.Replace(paragraph.Text, @"\r\n|\r|\n", " ");
+                            string translated =await Interpreter.FreeInterpretAsync(tobeTranslated);
+                            finalText += translated + "\n";
+                            paragraphs.Add(translated);
+                            foreach (var line in paragraph.Lines)
+                            {
+                                foreach (var textFragment in line)
+                                {
+                                    textState = textFragment.TextState;
+                                    textFragment.TextState.ForegroundColor = Color.FromArgb(1,1,1,1);
+                                }
+                            }
                         }
+                        AddText(finalText, section.Rectangle, page, textState);
                     }
                 }
+                document.Save("D:\\UserResource\\DeskTop\\Output\\Test.pdf");
             }
-            document.Save("D:\\UserResource\\DeskTop\\Output\\Test.pdf");
             return paragraphs;
+        }
+        private static void AddText(string text,Rectangle rectangle, Page page,TextState textState)
+        {
+            TextParagraph textParagraph = new();
+            TextBuilder textBuilder = new(page);
+            textParagraph.AppendLine(text);
+            textParagraph.FormattingOptions.WrapMode = Aspose.Pdf.Text.TextFormattingOptions.WordWrapMode.ByWords;
+            textParagraph.Position = 
+                new Position(rectangle.Center().X-rectangle.Width/2, rectangle.Center().Y+rectangle.Height/2); 
+            textBuilder.AppendParagraph(textParagraph);
         }
         private static bool IsTable(MarkupParagraph paragraph)
         {

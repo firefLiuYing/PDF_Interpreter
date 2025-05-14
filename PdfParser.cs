@@ -16,7 +16,7 @@ namespace PdfInterpreter
         public async Task<string> FindPdf(string inputPath,string outputPath)
         {
             await Task.Delay(1);
-            List<string> paragraphs = AsposeExtractor.ExtractTextFromPdf(inputPath);
+            List<string> paragraphs = await AsposeExtractor.ExtractTextFromPdf(inputPath);
             /*List<string> translateds = [];
             foreach (string par in paragraphs)
             {
@@ -24,13 +24,6 @@ namespace PdfInterpreter
                 translateds.Add(translated);
             }*/
             return "翻译完成";
-        }
-        public async Task<string> TestTranslate(string text)
-        {
-            await Task.Delay(1);
-            MyDebug.Log("正在翻译：" + text);
-            
-            return text;
         }
     }
 }
