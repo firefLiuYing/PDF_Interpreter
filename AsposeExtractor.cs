@@ -49,6 +49,7 @@ namespace PdfInterpreter
                         textParagraph.FormattingOptions.WrapMode = TextFormattingOptions.WordWrapMode.ByWords;
                         string toBeTranslated = string.Empty;
                         TextFragmentState curTextState = section.Paragraphs[0].Lines[0][0].TextState;
+                        bool isBold = true;
                         foreach (var paragraph in section.Paragraphs)
                         {
                             if (IsTable(paragraph)) continue;
@@ -60,6 +61,7 @@ namespace PdfInterpreter
                                     if(fragment.TextState.FontStyle!=FontStyles.Bold)
                                     {
                                         curTextState.FontStyle=FontStyles.Regular;
+                                        isBold = false;
                                     }
                                     toBeTranslated += fragment.Text;
                                     fragment.TextState.ForegroundColor=Aspose.Pdf.Color.FromArgb(1,1,1,1) ;
@@ -68,7 +70,7 @@ namespace PdfInterpreter
                         }
                         string finalText = await Interpreter.FreeInterpretAsync(toBeTranslated);
                         MyDebug.Log(finalText);
-                        var newFragment = GetTextFragment(finalText, curTextState);
+                        var newFragment = GetTextFragment(finalText, curTextState,isBold);
                         textParagraph.AppendLine(newFragment);
                         textBuilder.AppendParagraph(textParagraph);
                     }
@@ -99,11 +101,11 @@ namespace PdfInterpreter
             textParagraph.AppendLine(fragment);
             textBuilder.AppendParagraph(textParagraph);
         }
-        private static TextFragment GetTextFragment(string text,TextFragmentState textState)
+        private static TextFragment GetTextFragment(string text,TextFragmentState textState,bool isBold)
         {
             TextFragment fragment = new(text);
             fragment.TextState.FontSize = textState.FontSize;
-            fragment.TextState.FontStyle = textState.FontStyle;
+            fragment.TextState.FontStyle =isBold? FontStyles.Bold:FontStyles.Regular;
             fragment.TextState.CharacterSpacing = textState.CharacterSpacing;
             fragment.TextState.LineSpacing = textState.LineSpacing;
             fragment.TextState.Rotation = textState.Rotation;
